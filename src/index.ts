@@ -10,9 +10,9 @@
 |------------------------------------------------------------------------------
 */
 
-import { ApolloServer } from "@apollo/server";
 import express from "express";
 import { expressMiddleware } from "@apollo/server/express4";
+import createGraphQLServer from "./graphql";
 
 const PORT = process.env.PORT || 8000;
 
@@ -20,26 +20,13 @@ async function init() {
   const app = express();
   app.use(express.json());
 
-  const server = new ApolloServer({
-    typeDefs: `#graphql
-      type Query {
-        hello(name: String): String
-    }
-    `,
-    resolvers: {
-      Query: {
-        hello: (_, { name }) => `Hello, ${name}!`,
-      },
-    },
-  });
-
-  await server.start();
+  const gqlServer = await createGraphQLServer();
 
   app.get("/", (req, res) => {
     res.send("Hello World");
   });
 
-  app.use("/graphql", expressMiddleware(server));
+  app.use("/graphql", expressMiddleware(gqlServer));
 
   app.listen(PORT, () => console.log(`Server is running on port ${PORT}`));
 }
