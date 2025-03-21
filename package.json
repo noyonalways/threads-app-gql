@@ -13,8 +13,10 @@
   "license": "MIT",
   "dependencies": {
     "@apollo/server": "^4.11.3",
+    "@prisma/client": "^6.5.0",
     "express": "^4.21.2",
-    "graphql": "^16.10.0"
+    "graphql": "^16.10.0",
+    "prisma": "^6.5.0"
   },
   "devDependencies": {
     "@types/node": "^22.13.10",
