@@ -55,7 +55,7 @@ class UserService {
     const userSalt = user.salt;
     const userHashedPassword = UserService.generateHashedPassword(
       password,
-      userSalt
+      userSalt,
     );
 
     if (userHashedPassword !== user.password) {
