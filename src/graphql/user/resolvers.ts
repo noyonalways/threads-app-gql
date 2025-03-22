@@ -11,6 +11,12 @@ export const queries = {
     });
     return token;
   },
+  getCurrentLoggedInUser: async (_: any, __: any, context: any) => {
+    if (context && context.user) {
+      return await UserService.getUserById(context.user.id);
+    }
+    return null;
+  },
 };
 
 export const mutations = {

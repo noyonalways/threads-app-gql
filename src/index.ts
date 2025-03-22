@@ -13,6 +13,7 @@
 import express from "express";
 import { expressMiddleware } from "@apollo/server/express4";
 import createGraphQLServer from "./graphql";
+import UserService from "./services/user";
 
 const PORT = process.env.PORT || 8000;
 
@@ -26,8 +27,23 @@ async function init() {
     res.send("Hello World");
   });
 
-  app.use("/graphql", expressMiddleware(gqlServer));
-
+  app.use(
+    "/graphql",
+    expressMiddleware(gqlServer, {
+      context: async ({ req }) => {
+        const token = req.headers["authorization"];
+        if (!token) {
+          return { user: null };
+        }
+        try {
+          const decoded = UserService.decodeJWTToken(token);
+          return { user: decoded };
+        } catch (error) {
+          return { user: null };
+        }
+      },
+    }),
+  );
   app.listen(PORT, () => console.log(`Server is running on port ${PORT}`));
 }
 
